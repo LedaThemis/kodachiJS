@@ -8,15 +8,10 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 
-dotenv.config();
+import { ExtendedClient } from './interfaces/Client';
+import { CommandType } from './interfaces/Commands';
 
-interface CommandType {
-    data: SlashCommandBuilder;
-    execute: Function;
-}
-interface ExtendedClient extends Client {
-    commands?: Collection<string, CommandType>;
-}
+dotenv.config();
 
 const client: ExtendedClient = new Client({
     intents: [GatewayIntentBits.Guilds],
