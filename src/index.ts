@@ -10,6 +10,7 @@ import path from 'path';
 
 import { ExtendedClient } from './interfaces/Client';
 import { CommandType } from './interfaces/Commands';
+import { EventType } from './interfaces/Events';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ const client: ExtendedClient = new Client({
     intents: [GatewayIntentBits.Guilds],
 });
 
+// COMMANDS
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs
@@ -30,26 +32,21 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-client.on('ready', () => {
-    console.log('Ready!');
-});
+// EVENTS
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs
+    .readdirSync(eventsPath)
+    .filter((file) => file.endsWith('.ts'));
 
-client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
+for (const file of eventFiles) {
+    const filePath = path.join(eventsPath, file);
+    const event: EventType = require(filePath);
 
-    const command = client.commands?.get(interaction.commandName);
-
-    if (!command) return;
-
-    try {
-        await command.execute(interaction);
-    } catch (error) {
-        console.error(error);
-        await interaction.reply({
-            content: 'There was an error while executing this command!',
-            ephemeral: true,
-        });
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args, client));
     }
-});
+}
 
 client.login(process.env.TOKEN);
