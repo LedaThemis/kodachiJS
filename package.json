@@ -5,6 +5,7 @@
     "license": "MIT",
     "scripts": {
         "start:dev": "nodemon src/index.ts",
+        "deploy:commands": "ts-node src/deploy-commands.ts",
         "fmt": "prettier --write .",
         "fmtchk": "prettier --check ."
     },
