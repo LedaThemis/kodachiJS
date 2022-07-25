@@ -6,6 +6,7 @@ import { SlashCommandBuilder } from 'discord.js';
 export interface CommandType {
     data: SlashCommandBuilder;
     execute: Function;
+    needsAdmin?: boolean;
 }
 
 /**
