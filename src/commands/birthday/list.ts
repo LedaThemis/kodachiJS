@@ -44,8 +44,7 @@ module.exports = {
                     })
                     .join('\n') + '\n\n*mm/dd*';
 
-            await interaction
-                .reply(response)
+            await interaction.reply(response);
         });
     },
 };
