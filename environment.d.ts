@@ -4,6 +4,7 @@ declare global {
             TOKEN: string;
             clientId: string;
             guildId: string;
+            MONGODB_URI: string;
         }
     }
 }
