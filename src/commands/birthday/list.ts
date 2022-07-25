@@ -44,7 +44,10 @@ module.exports = {
                     })
                     .join('\n') + '\n\n*mm/dd*';
 
-            await interaction.reply(response);
+            // TODO: Investigate the cause of error
+            await interaction
+                .reply(response)
+                .catch((err) => console.error(err));
         });
     },
 };
