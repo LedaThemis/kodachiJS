@@ -1,11 +1,7 @@
-import {
-    Client,
-    Collection,
-    GatewayIntentBits,
-    SlashCommandBuilder,
-} from 'discord.js';
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import mongoose from 'mongoose';
 import path from 'path';
 
 import { ExtendedClient } from './interfaces/Client';
@@ -17,6 +13,12 @@ dotenv.config();
 const client: ExtendedClient = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
+
+// DB
+mongoose.connect(process.env.MONGODB_URI!);
+const db = mongoose.connection;
+db.on('connected', () => console.log('INFO | Succesfully connected to DB'));
+db.on('error', console.error.bind(console, 'ERROR | MongoDB connection error:'));
 
 // COMMANDS
 client.commands = new Collection();
