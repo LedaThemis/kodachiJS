@@ -15,7 +15,7 @@ import { EventType } from './interfaces/Events';
 dotenv.config();
 
 const client: ExtendedClient = new Client({
-    intents: [GatewayIntentBits.Guilds],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
 
 // COMMANDS
