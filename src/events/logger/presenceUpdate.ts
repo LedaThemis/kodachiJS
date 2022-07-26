@@ -56,24 +56,18 @@ module.exports = {
             oldPresence: Presence | undefined,
             newPresence: Presence,
         ) => {
-            if (!oldPresence?.activities) {
-                return true;
+            if (
+                oldPresence?.activities.length !== newPresence.activities.length
+            ) {
+                return false;
             }
-
-            newPresence.activities.forEach((activity, index) => {
-                if (!oldPresence.activities[index]) {
-                    return true;
-                }
-                const { name, state, details, emoji } =
-                    oldPresence.activities[index];
-
-                return (
-                    activity.name !== name ||
-                    activity.state !== state ||
-                    activity.details !== details ||
-                    activity.emoji !== emoji
-                );
-            });
+            return (
+                oldPresence!.activities ||
+                newPresence.activities.some(
+                    (activity, index) =>
+                        !activity.equals(oldPresence!.activities[index]),
+                )
+            );
         };
 
         const user = newPresence.member;
