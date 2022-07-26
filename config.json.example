@@ -1,7 +1,0 @@
-{
-    "admins": ["ID1", "ID2"],
-    "birthday": {
-        "channels": ["ID1", "ID2"],
-        "log": "ID"
-    }
-}
