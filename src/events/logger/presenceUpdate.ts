@@ -52,6 +52,30 @@ module.exports = {
             return result ? result : '**None**';
         };
 
+        const areDifferentActivities = (
+            oldPresence: Presence | undefined,
+            newPresence: Presence,
+        ) => {
+            if (!oldPresence?.activities) {
+                return true;
+            }
+
+            newPresence.activities.forEach((activity, index) => {
+                if (!oldPresence.activities[index]) {
+                    return true;
+                }
+                const { name, state, details, emoji } =
+                    oldPresence.activities[index];
+
+                return (
+                    activity.name !== name ||
+                    activity.state !== state ||
+                    activity.details !== details ||
+                    activity.emoji !== emoji
+                );
+            });
+        };
+
         const user = newPresence.member;
         if (config.logger.users.includes(user!.id)) {
             const statusChannel = (await client.channels.fetch(
@@ -75,15 +99,17 @@ module.exports = {
                 );
             }
 
-            const activityChannel = (await client.channels.fetch(
-                config.logger.channels.activity,
-            )) as TextChannel | null;
+            if (areDifferentActivities(oldPresence, newPresence)) {
+                const activityChannel = (await client.channels.fetch(
+                    config.logger.channels.activity,
+                )) as TextChannel | null;
 
-            activityChannel?.send(
-                `${getDevices(newPresence)}<@${
-                    user!.id
-                }> Changed Activity to \n${parseActivities(newPresence)}`,
-            );
+                activityChannel?.send(
+                    `${getDevices(newPresence)}<@${
+                        user!.id
+                    }> Changed Activity to \n${parseActivities(newPresence)}`,
+                );
+            }
         }
     },
 };
