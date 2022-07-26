@@ -1,6 +1,11 @@
 # KodachiJS
 
+Kodachi, written in TS.
+
+## Table of Contents
+
 - [KodachiJS](#kodachijs)
+  - [Table of Contents](#table-of-contents)
   - [Folder Structure](#folder-structure)
     - [src](#src)
       - [commands](#commands)
@@ -8,8 +13,6 @@
       - [interfaces](#interfaces)
       - [models](#models)
       - [tasks](#tasks)
-
-Kodachi, written in TS.
 
 ## Folder Structure
 
