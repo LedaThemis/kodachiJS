@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import { admins } from '../../config.json';
+import config from '../../config';
 import { ExtendedClient } from '../interfaces/Client';
 
 module.exports = {
@@ -15,7 +15,10 @@ module.exports = {
 
         if (!command) return;
 
-        if (command.needsAdmin && !admins.includes(interaction.user.id)) {
+        if (
+            command.needsAdmin &&
+            !config.admins.includes(interaction.user.id)
+        ) {
             await interaction.reply({
                 content: 'You do not have permission to use this command.',
                 ephemeral: true,

@@ -4,7 +4,7 @@ import fs from 'fs';
 import mongoose from 'mongoose';
 import path from 'path';
 
-import { birthday } from '../config.json';
+import config from '../config';
 import { ExtendedClient } from './interfaces/Client';
 import { CommandType } from './interfaces/Commands';
 import { EventType } from './interfaces/Events';
@@ -61,7 +61,7 @@ birthdayTask((err, result) => {
     if (err) {
         console.error(err);
     } else {
-        for (const channelId in birthday.channels) {
+        for (const channelId in config.birthday.channels) {
             const channel = client.channels.cache.get(channelId) as
                 | TextChannel
                 | undefined;
@@ -78,7 +78,7 @@ birthdayTask((err, result) => {
             }
         }
 
-        const logChannel = client.channels.cache.get(birthday.log) as
+        const logChannel = client.channels.cache.get(config.birthday.log) as
             | TextChannel
             | undefined;
 
