@@ -23,26 +23,27 @@ module.exports = {
             });
 
             // Craft response content
-            const response =
-                entries
-                    .map(({ user_id, month, day }, index) => {
-                        const user =
-                            interaction.client.users.cache.get(user_id);
-                        let user_text = '';
+            const values = await Promise.all(
+                entries.map(async ({ user_id, month, day }, index) => {
+                    const user = await interaction.client.users.fetch(user_id);
 
-                        if (user) {
-                            user_text = `${user.username}#${user.discriminator} (\`${user_id}\`)`;
-                        } else {
-                            user_text = `\`${user_id}\``;
-                        }
+                    let user_text = '';
 
-                        const zeroPaddedDay = String(day).padStart(2, '0');
-                        const zeroPaddedMonth = String(month).padStart(2, '0');
-                        const order = index + 1;
+                    if (user) {
+                        user_text = `${user.username}#${user.discriminator} (\`${user_id}\`)`;
+                    } else {
+                        user_text = `\`${user_id}\``;
+                    }
 
-                        return `${order}. ${user_text} born ${zeroPaddedMonth}/${zeroPaddedDay}`;
-                    })
-                    .join('\n') + '\n\n*mm/dd*';
+                    const zeroPaddedDay = String(day).padStart(2, '0');
+                    const zeroPaddedMonth = String(month).padStart(2, '0');
+                    const order: number = index + 1;
+
+                    return `${order}. ${user_text} born ${zeroPaddedMonth}/${zeroPaddedDay}`;
+                }),
+            );
+
+            const response = values.join('\n') + '\n\n*mm/dd*';
 
             // TODO: Investigate the cause of error
             await interaction
