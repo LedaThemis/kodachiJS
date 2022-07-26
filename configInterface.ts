@@ -13,4 +13,15 @@ export interface configInterface {
             };
         };
     };
+    logger: {
+        users: string[];
+        channels: {
+            voice: string;
+            activity: string;
+            status: string;
+            nickname: string;
+            username: string;
+        };
+        cmd_channel: string;
+    };
 }

@@ -13,7 +13,11 @@ import { birthdayTask } from './tasks/birthday';
 dotenv.config();
 
 const client: ExtendedClient = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildPresences,
+    ],
 });
 
 // DB
@@ -53,6 +57,27 @@ for (const file of eventFiles) {
         client.once(event.name, (...args) => event.execute(...args));
     } else {
         client.on(event.name, (...args) => event.execute(...args, client));
+    }
+}
+
+// LOGGER
+const loggerPath = path.join(__dirname, 'events', 'logger');
+const loggerEventsFiles = fs
+    .readdirSync(loggerPath)
+    .filter((file) => file.endsWith('.ts'));
+
+for (const file of loggerEventsFiles) {
+    const filePath = path.join(loggerPath, file);
+    const loggerEvent: EventType = require(filePath);
+
+    if (loggerEvent.once) {
+        client.once(loggerEvent.name, (...args) =>
+            loggerEvent.execute(...args),
+        );
+    } else {
+        client.on(loggerEvent.name, (...args) =>
+            loggerEvent.execute(...args, client),
+        );
     }
 }
 
