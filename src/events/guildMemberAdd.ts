@@ -6,7 +6,6 @@ import { ExtendedClient } from '../interfaces/Client';
 module.exports = {
     name: 'guildMemberAdd',
     async execute(member: GuildMember, client: ExtendedClient) {
-        console.log(`${member.displayName} joined to ${member.guild.name}`);
         const guildConfig = config.welcome.guilds[member.guild.id];
 
         const welcomeChannel = client.channels.cache.get(
