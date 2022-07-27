@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import Birthday from '../../models/Birthday';
+import { addEntry } from '../../lib/Birthday';
 
 module.exports = {
     async execute(interaction: ChatInputCommandInteraction) {
@@ -10,31 +10,13 @@ module.exports = {
             day: interaction.options.getInteger('day'),
         };
 
-        const userExists = await Birthday.findOne({ user_id: input.user_id });
+        await interaction.deferReply();
+        try {
+            await addEntry(input.user_id!, input.month!, input.day!);
 
-        if (userExists) {
-            await interaction.reply({
-                content: 'This `user_id` already has a birthday entry.',
-                ephemeral: true,
-            });
-        } else {
-            const birthday = new Birthday({
-                ...input,
-            });
-
-            birthday.save(async (err) => {
-                if (err) {
-                    await interaction.reply({
-                        content: 'An error occurred while saving to database.',
-                        ephemeral: true,
-                    });
-                    console.error(err.message);
-                } else {
-                    await interaction.reply(
-                        'Succesfully added birthday entry.',
-                    );
-                }
-            });
+            await interaction.editReply('Succesfully added birthday entry.');
+        } catch (error) {
+            await interaction.editReply(String(error));
         }
     },
 };

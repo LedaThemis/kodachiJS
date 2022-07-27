@@ -1,18 +1,12 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import Birthday from '../../models/Birthday';
+import { getEntries } from '../../lib/Birthday';
 
 module.exports = {
     async execute(interaction: ChatInputCommandInteraction) {
-        Birthday.find({}, {}, {}, async (err, entries) => {
-            if (err) {
-                await interaction.reply({
-                    content:
-                        'An error occurred while fetching entries from database.',
-                    ephemeral: true,
-                });
-            }
-
+        await interaction.deferReply();
+        try {
+            const entries = await getEntries();
             // Sort by month and day
             entries.sort((a, b) => {
                 if (a.month === b.month) {
@@ -43,12 +37,12 @@ module.exports = {
                 }),
             );
 
-            const response = values.join('\n') + '\n\n*mm/dd*';
+            const response =
+                'Birthday Table:\n\nFormat: mm/dd\n\n' + values.join('\n');
 
-            // TODO: Investigate the cause of error
-            await interaction
-                .reply(response)
-                .catch((err) => console.error(err));
-        });
+            await interaction.editReply(response);
+        } catch (error) {
+            await interaction.editReply(String(error));
+        }
     },
 };

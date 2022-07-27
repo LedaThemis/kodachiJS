@@ -28,6 +28,11 @@ export interface configInterface {
         defaultBalance: number;
     };
     errors: {
+        birthday: {
+            ENTRY_ALREADY_EXISTS: Error;
+            NO_ENTRY_EXISTS: Error;
+        };
+
         bank: {
             USER_NO_ACCOUNT: Error;
             USER_ALREADY_REGISTERED: Error;
