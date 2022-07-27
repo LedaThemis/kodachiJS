@@ -7,7 +7,7 @@ import path from 'path';
 import config from '../config';
 import { ExtendedClient } from './interfaces/Client';
 import { CommandType } from './interfaces/Commands';
-import { EventType } from './interfaces/Events';
+import { CacheType, EventType } from './interfaces/Events';
 import { birthdayTask } from './tasks/birthday';
 
 dotenv.config();
@@ -29,6 +29,12 @@ db.on(
     'error',
     console.error.bind(console, 'ERROR | MongoDB connection error:'),
 );
+
+// CACHE
+const CACHE_OBJECT: CacheType = {
+    status: {},
+    activities: {},
+};
 
 // COMMANDS
 client.commands = new Collection();
@@ -77,7 +83,7 @@ for (const file of loggerEventsFiles) {
         );
     } else {
         client.on(loggerEvent.name, (...args) =>
-            loggerEvent.execute(...args, client),
+            loggerEvent.execute(...args, client, CACHE_OBJECT),
         );
     }
 }

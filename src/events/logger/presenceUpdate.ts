@@ -1,7 +1,8 @@
-import { Presence, TextChannel } from 'discord.js';
+import { Activity, Presence, TextChannel } from 'discord.js';
 
 import config from '../../../config';
 import { ExtendedClient } from '../../interfaces/Client';
+import { CacheType } from '../../interfaces/Events';
 
 module.exports = {
     name: 'presenceUpdate',
@@ -9,6 +10,7 @@ module.exports = {
         oldPresence: Presence | undefined,
         newPresence: Presence,
         client: ExtendedClient,
+        cache: CacheType,
     ) {
         const statusEmojis = {
             online: '\u{1F7E2}',
@@ -53,39 +55,43 @@ module.exports = {
         };
 
         const areDifferentActivities = (
-            oldPresence: Presence | undefined,
-            newPresence: Presence,
+            oldActivities: Activity[] | undefined,
+            newActivities: Activity[],
         ) => {
-            if (
-                oldPresence?.activities.length !== newPresence.activities.length
-            ) {
-                return false;
-            }
             return (
-                oldPresence!.activities ||
-                newPresence.activities.some(
+                !oldActivities ||
+                oldActivities!.length !== newActivities.length ||
+                newActivities.some(
                     (activity, index) =>
-                        !activity.equals(oldPresence!.activities[index]),
+                        !activity.equals(oldActivities![index]),
                 )
             );
         };
 
         const user = newPresence.member;
+        const cachedStatus = cache.status[user!.id];
         if (config.logger.users.includes(user!.id)) {
             const statusChannel = (await client.channels.fetch(
                 config.logger.channels.status,
             )) as TextChannel | null;
-            if (oldPresence) {
-                if (oldPresence.status !== newPresence.status) {
+
+            if (cachedStatus) {
+                if (cachedStatus !== newPresence.status) {
+                    // Cache status
+                    cache.status[user!.id] = newPresence.status;
+
                     statusChannel?.send(
                         `<@${user?.id}> Changed status from ${getDevices(
-                            oldPresence,
-                        )}${statusEmojis[oldPresence.status]} to ${getDevices(
+                            cachedStatus,
+                        )}${statusEmojis[oldPresence!.status]} to ${getDevices(
                             newPresence,
                         )}${statusEmojis[newPresence.status]}`,
                     );
                 }
             } else {
+                // Cache status
+                cache.status[user!.id] = newPresence.status;
+
                 statusChannel?.send(
                     `<@${user?.id}> Changed status to ${getDevices(
                         newPresence,
@@ -93,7 +99,13 @@ module.exports = {
                 );
             }
 
-            if (areDifferentActivities(oldPresence, newPresence)) {
+            const cachedActivities = cache.activities[user!.id];
+            if (
+                areDifferentActivities(cachedActivities, newPresence.activities)
+            ) {
+                // Cache activities
+                cache.activities[user!.id] = newPresence.activities;
+
                 const activityChannel = (await client.channels.fetch(
                     config.logger.channels.activity,
                 )) as TextChannel | null;
