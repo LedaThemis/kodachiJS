@@ -20,7 +20,7 @@ const _incAmount = async (
             {},
             (err, updatedProfile) => {
                 if (err) {
-                    reject(err);
+                    reject(errors._generic['DATABASE']);
                 }
 
                 resolve(updatedProfile?.balance);
@@ -51,7 +51,7 @@ const registerUser = async (
         profile.save(
             (err, savedProfile: { userId: string; balance: number }) => {
                 if (err) {
-                    reject(err);
+                    reject(errors._generic['DATABASE']);
                 }
 
                 resolve(savedProfile);
@@ -113,7 +113,7 @@ const setBalance = async (amount: number, userId: string) => {
             {},
             (err, updatedProfile) => {
                 if (err) {
-                    reject(err);
+                    reject(errors._generic['DATABASE']);
                 }
 
                 resolve(updatedProfile?.balance);
@@ -134,7 +134,7 @@ const getBalances = async (): Promise<
     return new Promise(async (resolve, reject) => {
         Profile.find({}, {}, {}, (err, profiles) => {
             if (err) {
-                reject(err);
+                reject(errors._generic['DATABASE']);
             }
 
             resolve(profiles);

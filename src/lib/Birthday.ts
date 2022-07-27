@@ -28,7 +28,7 @@ const addEntry = (
 
             birthday.save(async (err, savedBirthday) => {
                 if (err) {
-                    reject(err);
+                    reject(errors._generic['DATABASE']);
                 }
 
                 resolve(savedBirthday);
@@ -56,7 +56,7 @@ const updateEntry = (userId: string, month: number, day: number) => {
                 {},
                 async (err, updatedBirthday) => {
                     if (err) {
-                        reject(err);
+                        reject(errors._generic['DATABASE']);
                     }
 
                     resolve(updatedBirthday);
@@ -79,7 +79,7 @@ const deleteEntry = (userId: string): Promise<null> => {
         } else {
             Birthday.findOneAndDelete({ user_id: userId }, {}, async (err) => {
                 if (err) {
-                    reject(err);
+                    reject(errors._generic['DATABASE']);
                 }
 
                 resolve(null);
@@ -97,7 +97,7 @@ const getEntries = (): Promise<
     return new Promise((resolve, reject) => {
         Birthday.find({}, {}, {}, async (err, entries) => {
             if (err) {
-                reject(err);
+                reject(errors._generic['DATABASE']);
             }
 
             resolve(entries);

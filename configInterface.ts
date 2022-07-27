@@ -38,5 +38,9 @@ export interface configInterface {
             USER_ALREADY_REGISTERED: Error;
             BOTS_CANT_HAVE_ACCOUNT: Error;
         };
+
+        _generic: {
+            DATABASE: Error;
+        };
     };
 }
