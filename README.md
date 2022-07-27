@@ -11,6 +11,7 @@ Kodachi, written in TS.
       - [commands](#commands)
       - [events](#events)
       - [interfaces](#interfaces)
+      - [lib](#lib)
       - [models](#models)
       - [tasks](#tasks)
 
@@ -18,24 +19,28 @@ Kodachi, written in TS.
 
 ### src
 
-Contains all source files related to kodachi.
+Contains all source files related.
 
 #### commands
 
-Contains all source files related to commands in kodachi.
+Contains all source files related to commands.
 
 #### events
 
-Contains all source files related to events in kodachi.
+Contains all source files related to events.
 
 #### interfaces
 
-Contains all source files related to interfaces in kodachi.
+Contains all source files related to interfaces.
+
+#### lib
+
+Contains all source files related to database methods for models.
 
 #### models
 
-Contains all source files related to database models in kodachi.
+Contains all source files related to database models.
 
 #### tasks
 
-Contains all source files related to tasks in kodachi.
+Contains all source files related to tasks.

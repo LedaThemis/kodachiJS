@@ -24,4 +24,14 @@ export interface configInterface {
         };
         cmd_channel: string;
     };
+    currency: {
+        defaultBalance: number;
+    };
+    errors: {
+        bank: {
+            USER_NO_ACCOUNT: Error;
+            USER_ALREADY_REGISTERED: Error;
+            BOTS_CANT_HAVE_ACCOUNT: Error;
+        };
+    };
 }
