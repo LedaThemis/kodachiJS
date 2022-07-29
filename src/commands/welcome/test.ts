@@ -28,15 +28,16 @@ module.exports = {
 
         const processedMessage = processMessage(guildConfig.message);
 
+        await interaction.deferReply();
         if (guildConfig.attachment_url) {
             await interaction
-                .reply({
+                .editReply({
                     content: processedMessage,
                     files: [guildConfig.attachment_url],
                 })
                 .catch((err) => console.error(err));
         } else {
-            await interaction.reply({
+            await interaction.editReply({
                 content: processedMessage,
             });
         }
