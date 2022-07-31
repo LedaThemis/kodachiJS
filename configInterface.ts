@@ -24,6 +24,11 @@ export interface configInterface {
         };
         cmd_channel: string;
     };
+    pins: {
+        [guildId: string]: {
+            pinsChannel: string;
+        };
+    };
     currency: {
         defaultBalance: number;
     };
@@ -37,6 +42,10 @@ export interface configInterface {
             USER_NO_ACCOUNT: Error;
             USER_ALREADY_REGISTERED: Error;
             BOTS_CANT_HAVE_ACCOUNT: Error;
+        };
+
+        pins: {
+            NO_PINS_CHANNEL_CONFIGURED: Error;
         };
 
         _generic: {
