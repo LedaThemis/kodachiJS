@@ -1,4 +1,9 @@
-import { TextChannel, VoiceState, userMention } from 'discord.js';
+import {
+    TextChannel,
+    VoiceState,
+    channelMention,
+    userMention,
+} from 'discord.js';
 
 import config from '../../../config';
 import { ExtendedClient } from '../../interfaces/Client';
@@ -19,21 +24,21 @@ module.exports = {
                 voiceStateChannel?.send(
                     `\u{1F7E8} ${userMention(
                         oldState.member?.id!,
-                    )} switched from <#${oldState.channelId}> to <#${
-                        newState.channelId
-                    }>`,
+                    )} switched from ${channelMention(
+                        oldState.channelId,
+                    )} to ${channelMention(newState.channelId)}`,
                 );
             } else if (!oldState.channelId && newState.channelId) {
                 voiceStateChannel?.send(
-                    `\u{1F7E9} ${userMention(newState.member?.id!)} joined <#${
-                        newState.channelId
-                    }>`,
+                    `\u{1F7E9} ${userMention(
+                        newState.member?.id!,
+                    )} joined ${channelMention(newState.channelId)}`,
                 );
             } else {
                 voiceStateChannel?.send(
-                    `\u{1F7E5} ${userMention(oldState.member?.id!)} left <#${
-                        oldState.channelId
-                    }>`,
+                    `\u{1F7E5} ${userMention(
+                        oldState.member?.id!,
+                    )} left ${channelMention(oldState.channelId!)}`,
                 );
             }
         }
