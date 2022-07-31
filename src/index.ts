@@ -1,4 +1,10 @@
-import { Client, Collection, GatewayIntentBits, TextChannel } from 'discord.js';
+import {
+    Client,
+    Collection,
+    GatewayIntentBits,
+    TextChannel,
+    userMention,
+} from 'discord.js';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import mongoose from 'mongoose';
@@ -105,7 +111,7 @@ birthdayTask((err, result) => {
                             (member) => member.id === user_id,
                         )
                     )
-                        channel.send(`<@${user_id}> Happy Birthday!`);
+                        channel.send(`${userMention(user_id)} Happy Birthday!`);
                 }
             }
         }
@@ -115,7 +121,7 @@ birthdayTask((err, result) => {
             | undefined;
 
         for (const user_id in result) {
-            logChannel?.send(`<@${user_id}> Happy Birthday!`);
+            logChannel?.send(`${userMention(user_id)} Happy Birthday!`);
         }
     }
 }).start();

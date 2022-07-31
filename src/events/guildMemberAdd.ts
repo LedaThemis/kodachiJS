@@ -1,4 +1,4 @@
-import { GuildMember, TextChannel } from 'discord.js';
+import { GuildMember, TextChannel, userMention } from 'discord.js';
 
 import config from '../../config';
 import { ExtendedClient } from '../interfaces/Client';
@@ -13,8 +13,10 @@ module.exports = {
         ) as TextChannel | undefined;
 
         const processMessage = (message: string) => {
-            const userMention = `<@${member.id}>`;
-            return message.replace(/<@USER_MENTION>/g, userMention);
+            return message.replace(
+                /<@USER_MENTION>/g,
+                userMention(member?.id!),
+            );
         };
 
         const processedMessage = processMessage(guildConfig.message);

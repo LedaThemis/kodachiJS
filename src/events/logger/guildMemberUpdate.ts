@@ -1,4 +1,4 @@
-import { GuildMember, TextChannel } from 'discord.js';
+import { GuildMember, TextChannel, userMention } from 'discord.js';
 
 import config from '../../../config';
 import { ExtendedClient } from '../../interfaces/Client';
@@ -17,15 +17,23 @@ module.exports = {
 
             if (oldMember.nickname && newMember.nickname) {
                 nicknameChannel?.send(
-                    `<@${oldMember.id}> changed nickname from **${oldMember.nickname}** to **${newMember.nickname}** in **${oldMember.guild.name}**`,
+                    `${userMention(oldMember.id)} changed nickname from **${
+                        oldMember.nickname
+                    }** to **${newMember.nickname}** in **${
+                        oldMember.guild.name
+                    }**`,
                 );
             } else if (!oldMember.nickname && newMember.nickname) {
                 nicknameChannel?.send(
-                    `<@${oldMember.id}> set nickname to **${newMember.nickname}** in **${oldMember.guild.name}**`,
+                    `${userMention(oldMember.id)} set nickname to **${
+                        newMember.nickname
+                    }** in **${oldMember.guild.name}**`,
                 );
             } else {
                 nicknameChannel?.send(
-                    `<@${oldMember.id}> reset nickname in **${oldMember.guild.name}**`,
+                    `${userMention(oldMember.id)} reset nickname in **${
+                        oldMember.guild.name
+                    }**`,
                 );
             }
         }

@@ -1,4 +1,4 @@
-import { TextChannel, User } from 'discord.js';
+import { TextChannel, User, userMention } from 'discord.js';
 
 import config from '../../../config';
 import { ExtendedClient } from '../../interfaces/Client';
@@ -12,7 +12,9 @@ module.exports = {
             )) as TextChannel | null;
 
             userChannel?.send(
-                `<@${oldUser.id}> changed username from ${oldUser.tag} to ${newUser.tag}`,
+                `${userMention(oldUser.id)} changed username from ${
+                    oldUser.tag
+                } to ${newUser.tag}`,
             );
         }
     },

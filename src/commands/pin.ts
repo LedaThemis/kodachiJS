@@ -7,6 +7,7 @@ import {
     MessageContextMenuCommandInteraction,
     PermissionFlagsBits,
     TextChannel,
+    userMention,
 } from 'discord.js';
 
 import config from '../../config';
@@ -73,7 +74,11 @@ module.exports = {
         });
 
         await interaction.editReply(
-            `<@${interaction.user.id}> pinned a message from this channel. See all pinned messages <#${pinsChannel?.id}>.`,
+            `${userMention(
+                interaction.user.id,
+            )} pinned a message from this channel. See all pinned messages <#${
+                pinsChannel?.id
+            }>.`,
         );
     },
 };

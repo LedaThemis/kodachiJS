@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, userMention } from 'discord.js';
 
 import { getBalances } from '../../lib/Profile';
 
@@ -15,7 +15,7 @@ module.exports = {
                         profile.userId,
                     );
 
-                    return `${index + 1}. <@${user.id}> has ${
+                    return `${index + 1}. ${userMention(user.id)} has ${
                         profile.balance
                     }$`;
                 }),

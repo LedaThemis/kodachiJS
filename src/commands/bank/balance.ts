@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, userMention } from 'discord.js';
 
 import config from '../../../config';
 import { getBalance } from '../../lib/Profile';
@@ -27,7 +27,7 @@ module.exports = {
         try {
             const userBalance = await getBalance(input.user!.id);
             await interaction.editReply(
-                `<@${input.user.id}> has ${userBalance}$`,
+                `${userMention(input.user.id)} has ${userBalance}$`,
             );
         } catch (error) {
             await interaction.editReply(String(error));

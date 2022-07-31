@@ -1,4 +1,4 @@
-import { Activity, Presence, TextChannel } from 'discord.js';
+import { Activity, Presence, TextChannel, userMention } from 'discord.js';
 
 import config from '../../../config';
 import { ExtendedClient } from '../../interfaces/Client';
@@ -81,11 +81,13 @@ module.exports = {
                     cache.status[user!.id] = newPresence.status;
 
                     statusChannel?.send(
-                        `<@${user?.id}> Changed status from ${getDevices(
-                            cachedStatus,
-                        )}${statusEmojis[oldPresence!.status]} to ${getDevices(
-                            newPresence,
-                        )}${statusEmojis[newPresence.status]}`,
+                        `${userMention(
+                            user?.id!,
+                        )} Changed status from ${getDevices(cachedStatus)}${
+                            statusEmojis[oldPresence!.status]
+                        } to ${getDevices(newPresence)}${
+                            statusEmojis[newPresence.status]
+                        }`,
                     );
                 }
             } else {
@@ -93,7 +95,7 @@ module.exports = {
                 cache.status[user!.id] = newPresence.status;
 
                 statusChannel?.send(
-                    `<@${user?.id}> Changed status to ${getDevices(
+                    `${userMention(user?.id!)} Changed status to ${getDevices(
                         newPresence,
                     )}${statusEmojis[newPresence.status]}`,
                 );
@@ -111,9 +113,9 @@ module.exports = {
                 )) as TextChannel | null;
 
                 activityChannel?.send(
-                    `${getDevices(newPresence)}<@${
-                        user!.id
-                    }> Changed Activity to \n${parseActivities(newPresence)}`,
+                    `${getDevices(newPresence)}${userMention(
+                        user!.id,
+                    )} Changed Activity to \n${parseActivities(newPresence)}`,
                 );
             }
         }

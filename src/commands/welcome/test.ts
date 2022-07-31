@@ -3,6 +3,7 @@ import {
     GuildMember,
     TextChannel,
     User,
+    userMention,
 } from 'discord.js';
 
 import config from '../../../config';
@@ -22,8 +23,7 @@ module.exports = {
         const guildConfig = config.welcome.guilds[interaction.guild!.id];
 
         const processMessage = (message: string) => {
-            const userMention = `<@${user?.id}>`;
-            return message.replace(/<@USER_MENTION>/g, userMention);
+            return message.replace(/<@USER_MENTION>/g, userMention(user?.id!));
         };
 
         const processedMessage = processMessage(guildConfig.message);
