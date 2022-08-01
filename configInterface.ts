@@ -1,14 +1,14 @@
-export type AvailablePlugins = (
+export type AvailablePlugins =
     | 'bank'
     | 'birthday'
     | 'info'
+    | 'logger'
     | 'pin'
-    | 'welcome'
-)[];
+    | 'welcome';
 
 export interface configInterface {
     admins: string[];
-    plugins: AvailablePlugins;
+    plugins: AvailablePlugins[];
 
     birthday: {
         channels: string[];
