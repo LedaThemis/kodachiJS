@@ -7,6 +7,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('bank')
         .setDescription('Various bank utilities')
+        .setDMPermission(false)
         .addSubcommand((subCommand) =>
             subCommand
                 .setName('register')

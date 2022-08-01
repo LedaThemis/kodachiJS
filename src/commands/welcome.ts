@@ -8,6 +8,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('welcome')
         .setDescription('Various commands related to welcome')
+        .setDMPermission(false)
         .addSubcommand((subCommand) =>
             subCommand
                 .setName('test')
