@@ -8,7 +8,7 @@ Kodachi, written in TS.
   - [Table of Contents](#table-of-contents)
   - [Folder Structure](#folder-structure)
     - [src](#src)
-      - [commands](#commands)
+      - [plugins](#plugins)
       - [events](#events)
       - [interfaces](#interfaces)
       - [lib](#lib)
@@ -21,9 +21,9 @@ Kodachi, written in TS.
 
 Contains all source files related.
 
-#### commands
+#### plugins
 
-Contains all source files related to commands.
+Contains all source files related to plugins.
 
 #### events
 
