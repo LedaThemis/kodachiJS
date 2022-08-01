@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import mongoose from 'mongoose';
 import path from 'path';
+import { Agent, setGlobalDispatcher } from 'undici';
 
 import config from '../config';
 import { ExtendedClient } from './interfaces/Client';
@@ -17,6 +18,9 @@ import { CacheType, EventType } from './interfaces/Events';
 import { birthdayTask } from './tasks/birthday';
 
 dotenv.config();
+
+// Edit agent timeout
+setGlobalDispatcher(new Agent({ connect: { timeout: 60_000 } }));
 
 const client: ExtendedClient = new Client({
     intents: [
