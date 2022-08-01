@@ -7,14 +7,16 @@ import {
 } from 'discord.js';
 import dotenv from 'dotenv';
 import fs from 'fs';
-import mongoose, { plugin } from 'mongoose';
+import mongoose from 'mongoose';
 import path from 'path';
 import { Agent, setGlobalDispatcher } from 'undici';
 
 import config from '../config';
 import { ExtendedClient } from './interfaces/Client';
-import { CommandType } from './interfaces/Commands';
 import { CacheType, EventType } from './interfaces/Events';
+import {
+    loadPlugins,
+} from './loaders/plugin';
 import { birthdayTask } from './tasks/birthday';
 
 dotenv.config();
@@ -48,66 +50,28 @@ const CACHE_OBJECT: CacheType = {
 
 // PLUGINS
 client.commands = new Collection();
-const pluginsPath = path.join(__dirname, 'plugins');
-const pluginsDirs = fs
-    .readdirSync(pluginsPath, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
 
-const pluginsCommands = pluginsDirs.map((dirName) => {
-    {
-        const commandsPath = path.join(
-            __dirname,
-            'plugins',
-            dirName,
-            'commands',
-        );
+const plugins = loadPlugins();
 
-        const commandsFiles = fs
-            .readdirSync(commandsPath)
-            .filter((fileName) => fileName.endsWith('.ts'))
-            .map((fileName) =>
-                path.join(__dirname, 'plugins', dirName, 'commands', fileName),
+plugins.forEach((plugin) => {
+    // Add plugin commands
+    plugin.commands.forEach((command) => {
+        client.commands?.set(command.data.name, command);
+    });
+
+    // Add plugin events
+    plugin.events.forEach((event) => {
+        if (event.once) {
+            client.once(event.name, (...args) => event.execute(...args));
+        } else if (event.cache) {
+            client.on(event.name, (...args) =>
+                event.execute(...args, client, CACHE_OBJECT),
             );
-
-        return commandsFiles;
-    }
+        } else {
+            client.on(event.name, (...args) => event.execute(...args, client));
+        }
+    });
 });
-
-for (const filePath of pluginsCommands.flat()) {
-    const command: CommandType = require(filePath);
-
-    client.commands.set(command.data.name, command);
-}
-
-const pluginsEvents = pluginsDirs.map((dirName) => {
-    {
-        const commandsPath = path.join(__dirname, 'plugins', dirName, 'events');
-
-        const eventsFiles = fs
-            .readdirSync(commandsPath)
-            .filter((fileName) => fileName.endsWith('.ts'))
-            .map((fileName) =>
-                path.join(__dirname, 'plugins', dirName, 'events', fileName),
-            );
-
-        return eventsFiles;
-    }
-});
-
-for (const filePath of pluginsEvents.flat()) {
-    const event: EventType = require(filePath);
-
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
-    } else if (event.cache) {
-        client.on(event.name, (...args) =>
-            event.execute(...args, client, CACHE_OBJECT),
-        );
-    } else {
-        client.on(event.name, (...args) => event.execute(...args, client));
-    }
-}
 
 // EVENTS
 const eventsPath = path.join(__dirname, 'events');
