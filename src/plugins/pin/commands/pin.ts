@@ -11,7 +11,7 @@ import {
     userMention,
 } from 'discord.js';
 
-import config from '../../config';
+import config from '../../../../config';
 
 const { pins, errors } = config;
 

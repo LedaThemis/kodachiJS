@@ -16,7 +16,7 @@ const loadSubCommand = (
 ): SubCommandType => {
     const subCommandPath = path.join(
         directoryPath,
-        commandName,
+        'subcommands',
         subCommandName,
     );
 

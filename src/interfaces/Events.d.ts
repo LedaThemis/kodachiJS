@@ -16,5 +16,6 @@ export interface CacheType {
 export interface EventType {
     name: string;
     once?: boolean;
+    cache?: boolean;
     execute: Function;
 }

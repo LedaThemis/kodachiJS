@@ -1,26 +1,24 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import path from 'path';
 
-import { ExtendedClient } from '../interfaces/Client';
-import { loadSubCommand } from '../loaders/subCommand';
+import { ExtendedClient } from '../../../interfaces/Client';
+import { loadSubCommand } from '../../../loaders/subCommand';
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('info')
+        .setName('welcome')
         .setDescription('Various commands related to welcome')
         .setDMPermission(false)
         .addSubcommand((subCommand) =>
-            subCommand.setName('ping').setDescription('Replies with Pong!'),
-        )
-        .addSubcommand((subCommand) =>
             subCommand
-                .setName('user')
-                .setDescription('Replies with user details'),
-        )
-        .addSubcommand((subCommand) =>
-            subCommand
-                .setName('server')
-                .setDescription('Replies with server details'),
+                .setName('test')
+                .setDescription('Test welcome message')
+                .addUserOption((option) =>
+                    option
+                        .setName('user')
+                        .setDescription('User to welcome')
+                        .setRequired(false),
+                ),
         ),
     async execute(
         interaction: ChatInputCommandInteraction,

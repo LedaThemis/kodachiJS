@@ -1,7 +1,7 @@
 import { TextChannel, User, userMention } from 'discord.js';
 
-import config from '../../../config';
-import { ExtendedClient } from '../../interfaces/Client';
+import config from '../../../../config';
+import { ExtendedClient } from '../../../interfaces/Client';
 
 module.exports = {
     name: 'userUpdate',

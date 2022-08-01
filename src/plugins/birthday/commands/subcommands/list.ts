@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import { getEntries } from '../../lib/Birthday';
+import { getEntries } from '../../../../lib/Birthday';
 
 module.exports = {
     async execute(interaction: ChatInputCommandInteraction) {

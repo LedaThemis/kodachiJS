@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import { updateEntry } from '../../lib/Birthday';
+import { addEntry } from '../../../../lib/Birthday';
 
 module.exports = {
     async execute(interaction: ChatInputCommandInteraction) {
@@ -12,8 +12,9 @@ module.exports = {
 
         await interaction.deferReply();
         try {
-            await updateEntry(input.user_id!, input.month!, input.day!);
-            await interaction.editReply('Successfully updated birthday entry.');
+            await addEntry(input.user_id!, input.month!, input.day!);
+
+            await interaction.editReply('Succesfully added birthday entry.');
         } catch (error) {
             await interaction.editReply(String(error));
         }

@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import path from 'path';
 
-import { loadSubCommand } from '../loaders/subCommand';
+import { loadSubCommand } from '../../../loaders/subCommand';
 
 module.exports = {
     data: new SlashCommandBuilder()

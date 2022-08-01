@@ -7,7 +7,7 @@ import {
 } from 'discord.js';
 import dotenv from 'dotenv';
 import fs from 'fs';
-import mongoose from 'mongoose';
+import mongoose, { plugin } from 'mongoose';
 import path from 'path';
 import { Agent, setGlobalDispatcher } from 'undici';
 
@@ -46,18 +46,67 @@ const CACHE_OBJECT: CacheType = {
     activities: {},
 };
 
-// COMMANDS
+// PLUGINS
 client.commands = new Collection();
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs
-    .readdirSync(commandsPath)
-    .filter((file) => file.endsWith('.ts'));
+const pluginsPath = path.join(__dirname, 'plugins');
+const pluginsDirs = fs
+    .readdirSync(pluginsPath, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
 
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
+const pluginsCommands = pluginsDirs.map((dirName) => {
+    {
+        const commandsPath = path.join(
+            __dirname,
+            'plugins',
+            dirName,
+            'commands',
+        );
+
+        const commandsFiles = fs
+            .readdirSync(commandsPath)
+            .filter((fileName) => fileName.endsWith('.ts'))
+            .map((fileName) =>
+                path.join(__dirname, 'plugins', dirName, 'commands', fileName),
+            );
+
+        return commandsFiles;
+    }
+});
+
+for (const filePath of pluginsCommands.flat()) {
     const command: CommandType = require(filePath);
 
     client.commands.set(command.data.name, command);
+}
+
+const pluginsEvents = pluginsDirs.map((dirName) => {
+    {
+        const commandsPath = path.join(__dirname, 'plugins', dirName, 'events');
+
+        const eventsFiles = fs
+            .readdirSync(commandsPath)
+            .filter((fileName) => fileName.endsWith('.ts'))
+            .map((fileName) =>
+                path.join(__dirname, 'plugins', dirName, 'events', fileName),
+            );
+
+        return eventsFiles;
+    }
+});
+
+for (const filePath of pluginsEvents.flat()) {
+    const event: EventType = require(filePath);
+
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else if (event.cache) {
+        client.on(event.name, (...args) =>
+            event.execute(...args, client, CACHE_OBJECT),
+        );
+    } else {
+        client.on(event.name, (...args) => event.execute(...args, client));
+    }
 }
 
 // EVENTS
@@ -74,27 +123,6 @@ for (const file of eventFiles) {
         client.once(event.name, (...args) => event.execute(...args));
     } else {
         client.on(event.name, (...args) => event.execute(...args, client));
-    }
-}
-
-// LOGGER
-const loggerPath = path.join(__dirname, 'events', 'logger');
-const loggerEventsFiles = fs
-    .readdirSync(loggerPath)
-    .filter((file) => file.endsWith('.ts'));
-
-for (const file of loggerEventsFiles) {
-    const filePath = path.join(loggerPath, file);
-    const loggerEvent: EventType = require(filePath);
-
-    if (loggerEvent.once) {
-        client.once(loggerEvent.name, (...args) =>
-            loggerEvent.execute(...args),
-        );
-    } else {
-        client.on(loggerEvent.name, (...args) =>
-            loggerEvent.execute(...args, client, CACHE_OBJECT),
-        );
     }
 }
 

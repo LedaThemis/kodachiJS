@@ -1,7 +1,7 @@
-import { ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, userMention } from 'discord.js';
 
-import config from '../../../config';
-import { registerUser } from '../../lib/Profile';
+import config from '../../../../../config';
+import { getBalance } from '../../../../lib/Profile';
 
 const { errors } = config;
 
@@ -25,8 +25,10 @@ module.exports = {
 
         await interaction.deferReply();
         try {
-            await registerUser(input.user!.id);
-            await interaction.editReply('Succesfully registered user.');
+            const userBalance = await getBalance(input.user!.id);
+            await interaction.editReply(
+                `${userMention(input.user.id)} has ${userBalance}$`,
+            );
         } catch (error) {
             await interaction.editReply(String(error));
         }

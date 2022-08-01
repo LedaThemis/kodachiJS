@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, userMention } from 'discord.js';
 
-import { getBalances } from '../../lib/Profile';
+import { getBalances } from '../../../../lib/Profile';
 
 module.exports = {
     async execute(interaction: ChatInputCommandInteraction) {

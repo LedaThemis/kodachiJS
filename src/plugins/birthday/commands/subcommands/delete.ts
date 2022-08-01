@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 
-import { deleteEntry } from '../../lib/Birthday';
+import { deleteEntry } from '../../../../lib/Birthday';
 
 module.exports = {
     async execute(interaction: ChatInputCommandInteraction) {

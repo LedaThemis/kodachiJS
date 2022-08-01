@@ -1,11 +1,12 @@
 import { Activity, Presence, TextChannel, userMention } from 'discord.js';
 
-import config from '../../../config';
-import { ExtendedClient } from '../../interfaces/Client';
-import { CacheType } from '../../interfaces/Events';
+import config from '../../../../config';
+import { ExtendedClient } from '../../../interfaces/Client';
+import { CacheType } from '../../../interfaces/Events';
 
 module.exports = {
     name: 'presenceUpdate',
+    cache: true,
     async execute(
         oldPresence: Presence | undefined,
         newPresence: Presence,
