@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import path from 'path';
 
 import { ExtendedClient } from '../interfaces/Client';
-import { SubCommandType } from '../interfaces/Commands';
+import { loadSubCommand } from '../loaders/subCommand';
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,14 +23,11 @@ module.exports = {
         interaction: ChatInputCommandInteraction,
         client: ExtendedClient,
     ) {
-        const subCommandName = interaction.options.getSubcommand();
-        const subCommandPath = path.join(
+        const subCommand = loadSubCommand(
             __dirname,
             path.parse(__filename).name,
-            subCommandName + '.ts',
+            interaction.options.getSubcommand(),
         );
-
-        const subCommand: SubCommandType = require(subCommandPath);
 
         await subCommand.execute(interaction, client);
     },
