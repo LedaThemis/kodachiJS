@@ -6,8 +6,8 @@
     "scripts": {
         "start:dev": "nodemon src/index.ts",
         "deploy:commands": "ts-node src/deploy-commands.ts",
-        "fmt": "prettier --write .",
-        "fmtchk": "prettier --check ."
+        "fmt": "prettier --write src",
+        "fmtchk": "prettier --check src"
     },
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^3.3.0",
