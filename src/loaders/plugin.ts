@@ -106,6 +106,4 @@ const loadPlugin = (name: string): PluginType => {
  */
 const loadPlugins = () => getPluginsNames().map(loadPlugin);
 
-export {
-    loadPlugins,
-};
+export { loadPlugins };

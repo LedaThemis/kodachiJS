@@ -14,9 +14,7 @@ import { Agent, setGlobalDispatcher } from 'undici';
 import config from '../config';
 import { ExtendedClient } from './interfaces/Client';
 import { CacheType, EventType } from './interfaces/Events';
-import {
-    loadPlugins,
-} from './loaders/plugin';
+import { loadPlugins } from './loaders/plugin';
 import { birthdayTask } from './tasks/birthday';
 
 dotenv.config();
