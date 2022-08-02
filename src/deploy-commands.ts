@@ -1,30 +1,49 @@
 import { REST } from '@discordjs/rest';
 import { RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js';
 import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
+
+import { loadPlugins } from './loaders/plugin';
 
 dotenv.config();
 
-const { TOKEN, clientId, guildId } = process.env;
+const { TOKEN, clientId } = process.env;
 
-const commands: RESTPostAPIApplicationCommandsJSONBody[] = [];
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs
-    .readdirSync(commandsPath)
-    .filter((file) => file.endsWith('.ts'));
+const applicationCommands: RESTPostAPIApplicationCommandsJSONBody[] = [];
 
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
+const guildsCommands: {
+    [guildId: string]: RESTPostAPIApplicationCommandsJSONBody[];
+} = {};
 
-    commands.push(command.data.toJSON());
+const plugins = loadPlugins();
+
+for (const plugin of plugins) {
+    plugin.commands.forEach((command) => {
+        if (command.guilds) {
+            for (const guildId of command.guilds) {
+                if (!guildsCommands[guildId]) {
+                    guildsCommands[guildId] = [];
+                }
+
+                guildsCommands[guildId].push(command.data.toJSON());
+            }
+        } else {
+            applicationCommands.push(command.data.toJSON());
+        }
+    });
 }
 
 const rest = new REST({ version: '10' }).setToken(TOKEN!);
 
-rest.put(Routes.applicationGuildCommands(clientId!, guildId!), {
-    body: commands,
-})
+for (const guildId in guildsCommands) {
+    rest.put(Routes.applicationGuildCommands(clientId!, guildId!), {
+        body: guildsCommands[guildId],
+    })
+        .then(() =>
+            console.log(`Successfully registered guild(${guildId}) commands.`),
+        )
+        .catch(console.error);
+}
+
+rest.put(Routes.applicationCommands(clientId!), { body: applicationCommands })
     .then(() => console.log('Successfully registered application commands.'))
     .catch(console.error);

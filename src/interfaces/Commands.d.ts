@@ -5,8 +5,15 @@ import { SlashCommandBuilder } from 'discord.js';
  */
 export interface CommandType {
     data: SlashCommandBuilder;
+    /**
+     * function to execute on command call
+     */
     execute: Function;
     needsAdmin?: boolean;
+    /**
+     * list of guilds the command is allowed in
+     */
+    guilds?: string[];
 }
 
 /**

@@ -77,4 +77,5 @@ module.exports = {
         await subCommand.execute(interaction);
     },
     needsAdmin: true,
+    guilds: [process.env.devGuildId],
 };

@@ -3,7 +3,7 @@ declare global {
         interface ProcessEnv {
             TOKEN: string;
             clientId: string;
-            guildId: string;
+            devGuildId: string;
             MONGODB_URI: string;
         }
     }
