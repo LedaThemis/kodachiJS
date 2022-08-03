@@ -3,6 +3,9 @@
     "author": "Leda",
     "version": "0.0.1",
     "license": "MIT",
+    "engines": {
+        "node": ">=16.15.0"
+    },
     "scripts": {
         "start:prod": "node dist/src/",
         "watch:build": "nodemon dist/src",
