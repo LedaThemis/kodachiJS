@@ -9,16 +9,19 @@ module.exports = {
             const profiles = await getBalances();
             profiles.sort((a, b) => b.balance! - a.balance!);
 
-            const values = await Promise.all(
-                profiles.map(async (profile, index) => {
-                    const user = await interaction.client.users.fetch(
-                        profile.userId,
-                    );
+            await interaction.guild?.members.fetch();
 
-                    return `${index + 1}. ${userMention(user.id)} has ${
-                        profile.balance
-                    }$`;
-                }),
+            profiles.filter((profile) =>
+                interaction.guild?.members.cache.has(profile.userId),
+            );
+
+            const values = await Promise.all(
+                profiles.map(
+                    async (profile, index) =>
+                        `${index + 1}. ${userMention(profile.userId)} has ${
+                            profile.balance
+                        }$`,
+                ),
             );
 
             const finalString =
