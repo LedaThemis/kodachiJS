@@ -7,7 +7,7 @@
         "node": ">=16.15.0"
     },
     "scripts": {
-        "start:prod": "node dist/src/",
+        "start": "node dist/src/",
         "watch:build": "nodemon dist/src",
         "watch:compile": "tsc --watch -p .",
         "build": "tsc -p .",
