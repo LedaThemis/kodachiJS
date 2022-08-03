@@ -5,6 +5,10 @@
     "license": "MIT",
     "scripts": {
         "start:dev": "nodemon src/index.ts",
+        "start:prod": "node dist/src/",
+        "watch:build": "nodemon dist/src",
+        "watch:compile": "tsc --watch -p .",
+        "build": "tsc -p .",
         "deploy:commands": "ts-node src/deploy-commands.ts",
         "fmt": "prettier --write src",
         "fmtchk": "prettier --check src"
