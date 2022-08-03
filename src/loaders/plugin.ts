@@ -77,9 +77,7 @@ const getPluginCommandsPaths = (name: string) => {
 
     const pluginCommandsPaths = fs
         .readdirSync(pluginCommandsPath)
-        .filter(
-            (fileName) => fileName.endsWith('.ts') || fileName.endsWith('.js'),
-        )
+        .filter((fileName) => fileName.endsWith('.js'))
         .map((commandName) => path.join(pluginCommandsPath, commandName));
 
     return pluginCommandsPaths;
@@ -107,9 +105,7 @@ const getPluginEventsPaths = (name: string) => {
 
     const pluginEventsPaths = fs
         .readdirSync(pluginEventsPath)
-        .filter(
-            (fileName) => fileName.endsWith('.ts') || fileName.endsWith('.js'),
-        )
+        .filter((fileName) => fileName.endsWith('.js'))
         .map((eventName) => path.join(pluginEventsPath, eventName));
 
     return pluginEventsPaths;
