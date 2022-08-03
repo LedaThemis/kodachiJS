@@ -42,6 +42,8 @@ const getPluginPath = (name: string) =>
 const getPluginCommandsPaths = (name: string) => {
     const pluginCommandsPath = path.join(getPluginPath(name), 'commands');
 
+    if (!fs.existsSync(pluginCommandsPath)) return [];
+
     const pluginCommandsPaths = fs
         .readdirSync(pluginCommandsPath)
         .filter(
@@ -69,6 +71,8 @@ const loadPluginCommands = (name: string) => {
  */
 const getPluginEventsPaths = (name: string) => {
     const pluginEventsPath = path.join(getPluginPath(name), 'events');
+
+    if (!fs.existsSync(pluginEventsPath)) return [];
 
     const pluginEventsPaths = fs
         .readdirSync(pluginEventsPath)
