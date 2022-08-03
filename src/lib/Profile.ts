@@ -35,11 +35,11 @@ const _incAmount = async (
  */
 const registerUser = async (
     userId: string,
-): Promise<{ userId: string; balance: number }> => {
+): Promise<{ userId: string; balance?: number }> => {
     return new Promise(async (resolve, reject) => {
         const foundOne = await Profile.findOne({ userId });
 
-        if (foundOne) {
+        if (foundOne && foundOne.balance) {
             reject(errors.bank['USER_ALREADY_REGISTERED']);
         }
 
@@ -49,7 +49,7 @@ const registerUser = async (
         });
 
         profile.save(
-            (err, savedProfile: { userId: string; balance: number }) => {
+            (err, savedProfile: { userId: string; balance?: number }) => {
                 if (err) {
                     reject(errors._generic['DATABASE']);
                 }
@@ -89,7 +89,7 @@ const getBalance = async (userId: string): Promise<number> => {
         if (!profile) {
             reject(errors.bank['USER_NO_ACCOUNT']);
         } else {
-            resolve(profile.balance);
+            resolve(profile.balance!);
         }
     });
 };
@@ -128,7 +128,7 @@ const setBalance = async (amount: number, userId: string) => {
 const getBalances = async (): Promise<
     {
         userId: string;
-        balance: number;
+        balance?: number;
     }[]
 > => {
     return new Promise(async (resolve, reject) => {
