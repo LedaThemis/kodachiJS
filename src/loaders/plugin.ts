@@ -8,6 +8,37 @@ import { EventType } from '../interfaces/Events';
 import { PluginType } from '../interfaces/Plugin';
 
 /**
+ * @param name plugin's name
+ * @returns list of plugin intents
+ */
+const getPluginIntents = (name: string) => {
+    const pluginIntentsFilePath = path.join(
+        __dirname,
+        '..',
+        'plugins',
+        name,
+        'intents',
+    );
+
+    if (
+        !fs.existsSync(pluginIntentsFilePath + '.ts') &&
+        !fs.existsSync(pluginIntentsFilePath + '.js')
+    )
+        return [];
+
+    return require(pluginIntentsFilePath);
+};
+
+/**
+ * @returns list of all enabled plugins' intents
+ */
+const getPluginsIntents = () =>
+    getPluginsNames()
+        .map(getPluginIntents)
+        .flat()
+        .filter((value, index, self) => self.indexOf(value) === index);
+
+/**
  * @returns plugins directory path
  */
 const getPluginsPath = () => path.join(__dirname, '..', 'plugins');
@@ -114,4 +145,4 @@ const loadPlugin = (name: string): PluginType => {
  */
 const loadPlugins = () => getPluginsNames().map(loadPlugin);
 
-export { loadPlugins };
+export { loadPlugins, getPluginsIntents };

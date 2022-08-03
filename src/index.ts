@@ -14,7 +14,7 @@ import { Agent, setGlobalDispatcher } from 'undici';
 import config from '../config';
 import { ExtendedClient } from './interfaces/Client';
 import { CacheType, EventType } from './interfaces/Events';
-import { loadPlugins } from './loaders/plugin';
+import { getPluginsIntents, loadPlugins } from './loaders/plugin';
 import { birthdayTask } from './tasks/birthday';
 
 dotenv.config();
@@ -23,12 +23,7 @@ dotenv.config();
 setGlobalDispatcher(new Agent({ connect: { timeout: 60_000 } }));
 
 const client: ExtendedClient = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildPresences,
-        GatewayIntentBits.GuildVoiceStates,
-    ],
+    intents: getPluginsIntents(),
 });
 
 // DB
