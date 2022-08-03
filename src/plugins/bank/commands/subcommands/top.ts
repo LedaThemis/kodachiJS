@@ -7,7 +7,7 @@ module.exports = {
         await interaction.deferReply();
         try {
             const profiles = await getBalances();
-            profiles.sort((a, b) => b.balance - a.balance);
+            profiles.sort((a, b) => b.balance! - a.balance!);
 
             const values = await Promise.all(
                 profiles.map(async (profile, index) => {
