@@ -1,3 +1,4 @@
+# ARCHIVED IN FAVOR OF [KodachiGo](https://github.com/LedaThemis/kodachiGo)
 # KodachiJS
 
 Kodachi, written in TS.
